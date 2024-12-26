@@ -1,6 +1,6 @@
 #!/bin/bash
 
-LOGS_FOLDER="/var/log/shell-script."
+LOGS_FOLDER="/var/log/expensive"
 SCRIPT_NAME=$(echo $0 | cut -d "." -f1)
 TIMESTAMP=$(date +%Y-%m-%d-%H-%M-%S) 
 LOG_FILE="$LOGS_FOLDER/$SCRIPT_NAME-$TIMESTAMP.log"
@@ -48,4 +48,4 @@ systemctl start mysqld &>>LOG_FILE
 VALIDATE $? "started MySQL Server"
 
 mysql_secure_installation --set-root-pass ExpenseApp@1 &>>LOG_FILE
-VALIDATE $? "setting up root password"
+VALIDATE $? "setting up root password" 
