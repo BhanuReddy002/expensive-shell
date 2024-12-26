@@ -32,11 +32,20 @@ VALIDATE(){
     fi        
 }
 
-USAGE(){
-    echo -e "$R USAGE:: $N sudo sh redirectors.sh package1 package2 ..."
-    exit 1
-} 
+
 
 echo "Script started executing at: $(date)" &>>$LOG_FILE   
 
 CHECK_ROOT
+
+dnf install mysql-server -y
+VALIDATE $? "Installing MySQL Server"
+
+systemctl enable mysqld
+VALIDATE $? "Enabled MySQL Server"
+
+systemctl start mysqld
+VALIDATE $? "started MySQL Server"
+
+mysql_secure_installation --set-root-pass ExpenseApp@1
+VALIDATE $? "setting up root password"
