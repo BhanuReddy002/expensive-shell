@@ -15,10 +15,10 @@ Y="\e[33m"
 
 CHECK_ROOT(){
      if [ $USERID -ne 0 ]
-then 
+     then 
     echo -e "$R please run this script with root priveleges $N" | tee -a $LOG_FILE
     exit 1
- fi     
+     fi     
 }
 
   
@@ -45,7 +45,14 @@ systemctl enable mysqld &>>LOG_FILE
 VALIDATE $? "Enabled MySQL Server"
 
 systemctl start mysqld &>>LOG_FILE
-VALIDATE $? "started MySQL Server"
+VALIDATE $? "started MySQL Server" 
 
-mysql_secure_installation --set-root-pass ExpenseApp@1 &>>LOG_FILE
-VALIDATE $? "setting up root password" 
+mysql -h mysql.daws81s.online -u root -pExpenseApp@1 -e 'show databases;' &>>LOG_FILE 
+if [ $? -ne 0 ]
+then 
+    echo "MySQL root password is not setup, setting now" &>>LOG_FILE     
+    mysql_secure_installation --set-root-pass ExpenseApp@1 
+    VALIDATE $? "setting up root password" 
+else
+    echo "MySQL root password is already setup...$Y skipping $N" | tee -a  
+fi      
