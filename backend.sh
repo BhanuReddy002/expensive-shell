@@ -71,3 +71,11 @@ VALIDATE $? "Extracting backend application code"
   
  npm install &>>$LOG_FILE
  pwd 
+ cp /home/ec2-user/expensive-shell/backend.service /etc/systemd/system/backend.service
+
+ #load the data before running backend
+   
+ dnf install  mysql -y &>>$LOG_FILE
+ VALIDATE $? "Installing MySql Client"
+
+ #mysql -h mysql.daws81s.online -uroot -pExpenseApp@1 < /app/schema/backend.sql
