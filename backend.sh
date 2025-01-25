@@ -78,4 +78,15 @@ VALIDATE $? "Extracting backend application code"
  dnf install  mysql -y &>>$LOG_FILE
  VALIDATE $? "Installing MySql Client"
 
- #mysql -h mysql.daws81s.online -uroot -pExpenseApp@1 < /app/schema/backend.sql
+ mysql -h mysql.daws81s.online -uroot -pExpenseApp@1 < /app/schema/backend.sql &>>$LOG_FILE
+ VALIDATE $? "Schema loading"
+
+ systemctl daemon-reload &>>$LOG_FILE
+ VALIDATE  $? "Daemon reload"
+
+
+ systemctl enable backend &>>$LOG_FILE
+ VALIDATE $? "Enabled backend"
+
+ systemctl start backend &>>$LOG_FILE
+ VALIDATE $? "Restart Backend"
