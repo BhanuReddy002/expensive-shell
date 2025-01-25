@@ -1,5 +1,4 @@
 #!/bin/bash
-
 LOGS_FOLDER="/var/log/expensive"
 SCRIPT_NAME=$(echo $0 | cut -d "." -f1)
 TIMESTAMP=$(date +%Y-%m-%d-%H-%M-%S) 
@@ -38,21 +37,14 @@ echo "Script started executing at: $(date)" | tee -a $$LOG_FILE
 
 CHECK_ROOT
 
-dnf install mysql-server -y &>>LOG_FILE
-VALIDATE $? "Installing MySQL Server"
+dnf module disable nodejs -y
+VALIDATE $? "Disable default nodejs"
 
-systemctl enable mysqld &>>LOG_FILE
-VALIDATE $? "Enabled MySQL Server"
+dnf module enable nodejs:20 -y
+VALIDATE $? "Enable nodejs:20
 
-systemctl start mysqld &>>LOG_FILE
-VALIDATE $? "started MySQL Server" 
+dnf install nodejs -y
+VALIDATE $? "Install nodejs"
 
-mysql -h mysql.daws81s.online -u root -pExpenseApp@1 -e 'show databases;' &>>LOG_FILE 
-if [ $? -ne 0 ]
-then 
-    echo "MySQL root password is not setup, setting now" &>>LOG_FILE     
-    mysql_secure_installation --set-root-pass ExpenseApp@1 
-    VALIDATE $? "setting up root password" 
-else
-    echo  -e "MySQL root password is already setup...$Y SKIPPING $N" | tee -a  $LOG_FILE
-fi      
+useradd expense
+VALIDATE $? "Creating expense user"
