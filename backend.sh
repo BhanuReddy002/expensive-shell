@@ -37,6 +37,8 @@ echo "Script started executing at: $(date)" | tee -a $$LOG_FILE
 
 CHECK_ROOT
 
+# backend steps from github file
+
 dnf module disable nodejs -y
 VALIDATE $? "Disable default nodejs"
 
