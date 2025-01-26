@@ -33,7 +33,7 @@ VALIDATE(){
 
 
 
-echo "Script started executing at: $(date)" | tee -a $$LOG_FILE   
+echo "Script started executing at: $(date)" | tee -a $LOG_FILE   
 
 CHECK_ROOT
 
@@ -61,7 +61,7 @@ fi
 mkdir -p /app
 VALIDATE $? "Creating /app folder"
 
-curl -o /tmp/backend.zip https://expense-builds.s3.us-east-1.amazonaws.com/expense-backend-v2.zip &>>LOG_FILE
+curl -o /tmp/backend.zip https://expense-builds.s3.us-east-1.amazonaws.com/expense-backend-v2.zip &>>$LOG_FILE
 VALIDATE $? "Downloading backend application code"
 
 cd /app
